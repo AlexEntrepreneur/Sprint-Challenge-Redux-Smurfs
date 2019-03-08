@@ -71,7 +71,7 @@ class App extends Component {
       <div className="App">
         {
           smurfs.map(smurf =>
-            <div key={smurf.id + 1}>
+            <div className="card" key={smurf.id + 1}>
               <h3>{smurf.name}</h3>
               <h3>{smurf.age}</h3>
               <h3>{smurf.height}</h3>
@@ -98,7 +98,6 @@ class App extends Component {
           name="height"
           />
         <button type="submit">{this.props.currentSmurfId ? 'Confirm' : 'Add Friend'}</button>
-        </form>
         {
           this.props.currentSmurfId &&
           <button
@@ -108,6 +107,7 @@ class App extends Component {
             Cancel
           </button>
         }
+        </form>
       </div>
     );
   }
