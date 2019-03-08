@@ -17,5 +17,13 @@ export const getSmurfs = () => (dispatch) => {
     .then(res =>
       dispatch({ type: types.GET_SMURFS_SUCCESS, payload: res.data })
     )
-    .catch(err => console.log(err.message));
+    .catch(err => console.error(err.message));
+};
+
+export const addSmurf = (name, age, height) => (dispatch) => {
+  axios.post(APIUrl, { name, age: Number(age), height })
+    .then(res =>
+      dispatch({ type: types.ADD_SMURF_SUCCESS, payload: res.data })
+    )
+    .catch(err => console.error(err.message));
 };

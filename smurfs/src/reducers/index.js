@@ -1,7 +1,8 @@
-import { GET_SMURFS_SUCCESS } from '../actions/action-constants';
+import { GET_SMURFS_SUCCESS, ADD_SMURF_SUCCESS } from '../actions/action-constants';
 
 const initialSmurfsState = {
   smurfs: [],
+  smurfAdded: false,
   error: null
 }
 
@@ -12,6 +13,12 @@ export const smurfsReducer = (state = initialSmurfsState, action) => {
         ...state,
         smurfs: action.payload
       };
+      case ADD_SMURF_SUCCESS:
+        return {
+          ...state,
+          smurfAdded: true,
+          smurfs: action.payload
+        }
     default:
       return state;
   }
