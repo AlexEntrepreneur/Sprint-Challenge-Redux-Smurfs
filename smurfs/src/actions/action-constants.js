@@ -1,0 +1,1 @@
+export const GET_SMURFS_SUCCESS = 'GET_SMURFS_SUCCESS';
