@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getSmurfs, addSmurf, deleteSmurf } from '../actions/action-creators';
+import { getSmurfs, addSmurf, deleteSmurf, editSmurf } from '../actions/action-creators';
 import './App.css';
 
 class App extends Component {
+  // smurfForm = React.createRef();
+
   componentDidMount() {
     this.props.getSmurfs();
   }
@@ -32,6 +34,17 @@ class App extends Component {
     this.props.deleteSmurf(id);
   }
 
+  onEditBtnClick = (smurf) => {
+    // const fields = ['name', 'age', 'height'];
+    //
+    // for (let i = 0; i < this.smurfForm.length; i++) {
+    //   console.dir(this.smurfForm[i])
+    // }
+
+    smurf.name = 'Changed!';
+    this.props.editSmurf(smurf);
+  }
+
   render() {
     const { smurfs } = this.props;
     return (
@@ -43,10 +56,15 @@ class App extends Component {
               <h3>{smurf.age}</h3>
               <h3>{smurf.height}</h3>
               <button onClick={() => this.onDeleteBtnClick(smurf.id)}>delete</button>
+              <button onClick={() => this.onEditBtnClick(smurf)}>edit</button>
             </div>
           )
         }
-        <form className="add-smurf-form" onSubmit={this.onSmurfFormSubmit}>
+        <form
+          className="add-smurf-form"
+          onSubmit={this.onSmurfFormSubmit}
+          ref={this.smurfForm}
+        >
           <input
             type="text"
             name="name"
@@ -77,7 +95,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getSmurfs,
     addSmurf,
-    deleteSmurf
+    deleteSmurf,
+    editSmurf
   }, dispatch);
 }
 
