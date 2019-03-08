@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getSmurfs, addSmurf, deleteSmurf, editSmurf } from '../actions/action-creators';
+import {
+  getSmurfs,
+  addSmurf,
+  deleteSmurf,
+  editSmurf,
+  selectCurrentSmurf,
+  deselectCurrentSmurf
+} from '../actions/action-creators';
 import './App.css';
 
 class App extends Component {
-  // smurfForm = React.createRef();
+  smurfForm = React.createRef();
 
   componentDidMount() {
     this.props.getSmurfs();
@@ -18,9 +25,18 @@ class App extends Component {
     const age = event.target['age'].value;
     const height = event.target['height'].value;
     const formIsFilled = name !== '' && age !== '' && height !== '';
-    if (formIsFilled) {
-      this.props.addSmurf(name, age, height);
-      this.clearForm(event.target)
+
+    if (this.props.currentSmurfId) {
+      if (formIsFilled) {
+        this.props.editSmurf(name, age, height, this.props.currentSmurfId);
+        this.onEditCancelBtnClick();
+      }
+    }
+    else {
+      if (formIsFilled) {
+        this.props.addSmurf(name, age, height);
+        this.clearForm(event.target);
+      }
     }
   }
 
@@ -28,6 +44,7 @@ class App extends Component {
     for (let i = 0; i < form.length; i++) {
       form[i].value = '';
     }
+    form[0].focus();
   }
 
   onDeleteBtnClick = (id) => {
@@ -35,14 +52,17 @@ class App extends Component {
   }
 
   onEditBtnClick = (smurf) => {
-    // const fields = ['name', 'age', 'height'];
-    //
-    // for (let i = 0; i < this.smurfForm.length; i++) {
-    //   console.dir(this.smurfForm[i])
-    // }
+    const fields = ['name', 'age', 'height'];
+    for (let i = 0; i < this.smurfForm.current.length; i++) {
+      fields.forEach(field => this.smurfForm.current[field].value = smurf[field]);
+    }
 
-    smurf.name = 'Changed!';
-    this.props.editSmurf(smurf);
+    this.props.selectCurrentSmurf(smurf.id);
+  }
+
+  onEditCancelBtnClick = () => {
+    this.props.deselectCurrentSmurf();
+    this.clearForm(this.smurfForm.current);
   }
 
   render() {
@@ -77,8 +97,17 @@ class App extends Component {
           type="text"
           name="height"
           />
-        <button type="submit">Add Smurf</button>
+        <button type="submit">{this.props.currentSmurfId ? 'Confirm' : 'Add Friend'}</button>
         </form>
+        {
+          this.props.currentSmurfId &&
+          <button
+            className="cancel-btn"
+            onClick={this.onEditCancelBtnClick}
+            >
+            Cancel
+          </button>
+        }
       </div>
     );
   }
@@ -87,7 +116,8 @@ class App extends Component {
 const mapStateToProps = (reducers) => {
   return {
     smurfs: reducers.smurfsReducer.smurfs,
-    error: reducers.smurfsReducer.error
+    error: reducers.smurfsReducer.error,
+    currentSmurfId: reducers.smurfsReducer.currentSmurfId
   }
 };
 
@@ -96,6 +126,8 @@ const mapDispatchToProps = (dispatch) => {
     getSmurfs,
     addSmurf,
     deleteSmurf,
+    selectCurrentSmurf,
+    deselectCurrentSmurf,
     editSmurf
   }, dispatch);
 }

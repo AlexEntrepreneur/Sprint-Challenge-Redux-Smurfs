@@ -36,10 +36,23 @@ export const deleteSmurf = (id) => (dispatch) => {
     .catch(err => console.error(err.message))
 }
 
-export const editSmurf = (smurf) => (dispatch) => {
-  axios.put(`${APIUrl}/${smurf.id}`, smurf)
+export const editSmurf = (name, age, height, id) => (dispatch) => {
+  axios.put(`${APIUrl}/${id}`, { name, age: Number(age), height })
     .then(res =>
       dispatch({ type: types.EDIT_SMURF_SUCCESS, payload: res.data })
     )
     .catch(err => console.error(err.message))
 }
+
+export const selectCurrentSmurf = (id) => {
+  return {
+    type: types.SELECT_CURRENT_SMURF,
+    payload: id
+  }
+};
+
+export const deselectCurrentSmurf = () => {
+  return {
+    type: types.DESELECT_CURRENT_SMURF
+  }
+};
