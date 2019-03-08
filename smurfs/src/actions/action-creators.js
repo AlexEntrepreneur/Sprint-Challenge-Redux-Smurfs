@@ -27,3 +27,11 @@ export const addSmurf = (name, age, height) => (dispatch) => {
     )
     .catch(err => console.error(err.message));
 };
+
+export const deleteSmurf = (id) => (dispatch) => {
+  axios.delete(`${APIUrl}/${id}`)
+    .then(res =>
+      dispatch({ type: types.DELETE_SMURF_SUCCESS, payload: res.data })
+    )
+    .catch(err => console.error(err.message))
+}

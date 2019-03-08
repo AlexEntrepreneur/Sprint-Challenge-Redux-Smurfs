@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getSmurfs, addSmurf } from '../actions/action-creators';
+import { getSmurfs, addSmurf, deleteSmurf } from '../actions/action-creators';
 import './App.css';
 
 class App extends Component {
@@ -28,6 +28,10 @@ class App extends Component {
     }
   }
 
+  onDeleteBtnClick = (id) => {
+    this.props.deleteSmurf(id);
+  }
+
   render() {
     const { smurfs } = this.props;
     return (
@@ -38,6 +42,7 @@ class App extends Component {
               <h3>{smurf.name}</h3>
               <h3>{smurf.age}</h3>
               <h3>{smurf.height}</h3>
+              <button onClick={() => this.onDeleteBtnClick(smurf.id)}>delete</button>
             </div>
           )
         }
@@ -71,7 +76,8 @@ const mapStateToProps = (reducers) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     getSmurfs,
-    addSmurf
+    addSmurf,
+    deleteSmurf
   }, dispatch);
 }
 
